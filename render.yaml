@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: urltrim-shared-backend
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_ORIGIN
+        value: https://www.urltrim.online
+      - key: PORT
+        value: 5000
