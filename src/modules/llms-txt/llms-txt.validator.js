@@ -10,11 +10,12 @@ const optionalUrl = z
 export const llmsTxtRequestSchema = z.object({
   websiteUrl: optionalUrl,
   sitemapUrl: optionalUrl,
-  pageUrls: z.array(z.string().url()).max(env.MAX_PAGES).optional().default([]),
+  pageUrls: z.array(z.string().url()).optional().default([]),
   options: z
     .object({
-      maxPages: z.coerce.number().int().min(1).max(env.MAX_PAGES).optional(),
+      maxPages: z.coerce.number().int().min(1).optional(),
       includeBlogs: z.boolean().optional().default(true),
+      deepCrawl: z.boolean().optional().default(true),
     })
     .optional()
     .default({}),

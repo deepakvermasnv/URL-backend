@@ -106,6 +106,9 @@ export async function runLlmsTxtJob(input, runOptions = {}) {
   const crawlResult = await crawlPages(deduped, {
     maxPages: input.options.maxPages,
     disallowPaths,
+    allowedHost,
+    includeBlogs: input.options.includeBlogs,
+    deepCrawl: input.options.deepCrawl,
   });
 
   warnings.push(...crawlResult.warnings);
@@ -113,7 +116,7 @@ export async function runLlmsTxtJob(input, runOptions = {}) {
   const successfulPages = crawlResult.pages.filter((p) => p.success);
   const meta = buildWebsiteMeta(successfulPages, siteOrigin);
 
-  const discoveredUrls = deduped.map((d) => ({ url: d.url, source: d.source }));
+  const discoveredUrls = crawlResult.pages.map((d) => ({ url: d.url, source: d.source }));
 
   const baseResponse = {
     website: {

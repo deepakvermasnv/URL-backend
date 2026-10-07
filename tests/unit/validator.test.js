@@ -9,13 +9,12 @@ describe('parseLlmsTxtRequest', () => {
     expect(parsed.websiteUrl).toBe('https://example.com');
   });
 
-  it('rejects maxPages above the server limit', () => {
-    expect(() =>
-      parseLlmsTxtRequest({
-        websiteUrl: 'https://example.com',
-        options: { maxPages: 9999 },
-      }),
-    ).toThrow();
+  it('caps maxPages to the server limit', () => {
+    const parsed = parseLlmsTxtRequest({
+      websiteUrl: 'https://example.com',
+      options: { maxPages: 9999 },
+    });
+    expect(parsed.options.maxPages).toBeLessThanOrEqual(5000);
   });
 
   it('requires at least one input source', () => {

@@ -76,8 +76,10 @@ export function generateLlmsTxt(successfulPages, meta) {
     if (seenUrls.has(url)) continue;
     seenUrls.add(url);
 
-    const title = sanitizeMarkdownText(String(page.title || page.h1 || url));
-    const description = page.limitedContent ? '' : String(page.pageDescription || '');
+    const title = sanitizeMarkdownText(String(page.metaTitle || page.h1 || page.title || url));
+    const description = page.limitedContent
+      ? ''
+      : sanitizeMarkdownText(String(page.metaDescription || page.pageDescription || ''));
     const line = formatLinkLine(title, url, description);
     const section = classifyPageSection(url, meta.siteOrigin);
     if (sections[section]) {

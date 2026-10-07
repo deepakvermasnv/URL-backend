@@ -40,7 +40,7 @@ export function extractPageContent(html, pageUrl) {
 
   $('script, style, noscript').remove();
 
-  const title = sanitizeMarkdownText($('title').first().text());
+  const metaTitle = sanitizeMarkdownText($('title').first().text());
   const metaDescription = sanitizeMarkdownText(
     $('meta[name="description"]').attr('content') ||
       $('meta[property="og:description"]').attr('content') ||
@@ -52,6 +52,7 @@ export function extractPageContent(html, pageUrl) {
     pageUrl;
 
   const h1 = sanitizeMarkdownText($('h1').first().text());
+
   const headings = [];
   $('h2, h3').each((_, el) => {
     const text = sanitizeMarkdownText($(el).text());
@@ -93,7 +94,7 @@ export function extractPageContent(html, pageUrl) {
     (h1 && mainText ? `${h1}. ${mainText}` : '') ||
     mainText ||
     h1 ||
-    title ||
+    metaTitle ||
     '';
 
   const limitedContent = !descriptionSource && mainText.length < 20;
@@ -103,12 +104,13 @@ export function extractPageContent(html, pageUrl) {
   return {
     url: pageUrl,
     canonical,
-    title: title || h1 || new URL(pageUrl).pathname,
+    title: metaTitle || h1 || new URL(pageUrl).pathname,
+    metaTitle,
     metaDescription,
     h1,
     headings: headings.slice(0, 8),
     mainText: truncateText(mainText, 1200),
-    internalLinks: [...new Set(internalLinks)].slice(0, 30),
+    internalLinks: [...new Set(internalLinks)].slice(0, 50),
     pageDescription,
     limitedContent,
     jsHeavy,
